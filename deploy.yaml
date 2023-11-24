@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: chatbot
+  name: chatbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatbot
+  template:
+    metadata:
+      labels:
+        app: chatbot
+    spec:
+      containers:
+      - image: abirdcfly/chatbot:v0.0.1
+        name: chatbot
+        ports:
+        - containerPort: 8501
+        resources: {}
+        imagePullPolicy: Always
