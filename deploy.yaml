@@ -21,3 +21,40 @@ spec:
         - containerPort: 8501
         resources: {}
         imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatbot
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 8501
+    protocol: TCP
+    targetPort: 8501
+  selector:
+    app: chatbot
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chatbot
+spec:
+  ingressClassName: portal-ingress
+  rules:
+  - host: chatbot.172.22.96.136.nip.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: chatbot
+            port:
+              number: 8501
+        path: /
+        pathType: Prefix
+
